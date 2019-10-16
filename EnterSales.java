@@ -7,6 +7,12 @@ public class EnterSales {
 	
 	ArrayList<Service> ServicesList = new ArrayList<Service>();
 	
+	public void DisplayList(ArrayList<Service> ServicesList) {
+		for (Service x : ServicesList) {
+			System.out.println(x.getNameOfCustomer()+", "+x.getNameOfService()+", "+
+					x.getPriceOfService()+", "+x.getDateAsString());
+		}
+	}
 	public File inputFile() {
 	JFileChooser jFileChooser = new JFileChooser(); 
 		if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -24,7 +30,13 @@ public class EnterSales {
 	public void readServicesFromFile(File validFile) {
 		try {
 			Scanner textFile = new Scanner(validFile);
+			String customerName = textFile.next();
+			String serviceName = textFile.next();
+			float Price = textFile.nextFloat();
+			String Date = textFile.nextLine();
+			
 			System.out.println("Regular File Found!");	 
+			textFile.close();
 		}
 		catch(FileNotFoundException e) {
 				System.out.println("Invalid File!");
@@ -34,12 +46,8 @@ public class EnterSales {
 	 * Write services into the text file 
 	 * @param validFile
 	 */
-	public void addAllServicesToFile(File validFile) throws IOException {
-			JFileChooser jFileChooser = new JFileChooser(); 
-			jFileChooser.showOpenDialog(new JFrame());
-			String outname2 = jFileChooser.getSelectedFile().getAbsolutePath();
+	public void addAllServicesToFile(File validFile) {
 			Scanner console = new Scanner(System.in);
-			File fileToPrint = new File (outname2);
 			boolean checkingFile = true;
 			int i = 0; 
 			while(checkingFile) {
@@ -53,6 +61,7 @@ public class EnterSales {
 						System.out.println("Enter name of customer");
 						ServicesList.get(i).setNameOfCustomer(console.nextLine()); //Set name of customer 
 						System.out.println("Enter name of service ex.) Breakfast, Lunch, Dinner, Conference, Tea, Massage");
+						
 						ServicesList.get(i).setNameOfService(console.next()); //set name of service 
 						System.out.println("Enter price of service: ");
 						ServicesList.get(i).setPriceOfService(console.nextFloat()); 
@@ -66,8 +75,8 @@ public class EnterSales {
 						if (continueInput != 'n' && continueInput != 'y') {
 							throw new IOException("invalid input");
 						}
+						console.nextLine(); //burn nextline 
 					}
-				//Add values in ArrayList into file
 					for (i = 0; i < ServicesList.size(); i++) {
 						Service service  = ServicesList.get(i);
 						String serviceOutput = service.getNameOfCustomer()+", "+service.getNameOfService()+", "+
@@ -78,6 +87,9 @@ public class EnterSales {
 					fileWriter.close();
 					console.close();
 				} 
+				catch(IOException e) {
+					System.out.println(e.getMessage());
+				}
 				catch (FileNotFoundException e) {
 					System.out.println("Invalid File!");
 				} //end of catch 

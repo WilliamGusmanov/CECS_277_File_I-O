@@ -1,14 +1,13 @@
 package fileInputOutPackage;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 public class Service {
 	
 	enum nameOfService{
 		Breakfast,Lunch,Dinner,Conference,Tea,Massage
 	}
 	private String nameOfCustomer;
-	private String nameOfService; //Breakfast, lunch, dinner, etc...
+	private nameOfService serviceName; //Breakfast, lunch, dinner, etc...
 	private float priceOfService;
 	
 	LocalDate date;
@@ -17,31 +16,27 @@ public class Service {
 	// "MM/dd/uuuu"
 	//String[] months = {"January","February","March","April",
 	//		"May","June","July","August","September","October","November","December"};
-	public void inputDate(){
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter Date: 'MM/dd/yyyy'");
-		String inputDate = in.next();
+	public void inputDate(String inputDate){
 		String[] input = inputDate.split("/");
 		int month = Integer.parseInt(input[0]);
 		int day = Integer.parseInt(input[1]);
 		int year = Integer.parseInt(input[2]);
 		date = LocalDate.of(year, month, day); 
 		dateAsString = date.format(formatter);	
-		in.close();
 	}
 	//default constructor
 	public Service() {
 		this.nameOfCustomer = "Customer";
-		this.nameOfService = "NameOfService";
+		this.serviceName = nameOfService.Breakfast;
 		this.priceOfService = 0.0f;
 		this.date = LocalDate.now();
 		this.dateAsString = this.date.format(formatter); 
 		
 	}
 	//second constructor
-	public Service(String nameOfCustomer, String nameOfService, float priceOfService, LocalDate date) {
+	public Service(String nameOfCustomer, String serviceName, float priceOfService, LocalDate date) {
 		this.nameOfCustomer = nameOfCustomer;
-		this.nameOfService = nameOfService;
+		this.serviceName = nameOfService.valueOf(serviceName);
 		this.priceOfService = priceOfService;
 		this.date = date;
 	}
@@ -51,11 +46,11 @@ public class Service {
 	public void setNameOfCustomer(String nameOfCustomer) {
 		this.nameOfCustomer = nameOfCustomer;
 	}
-	public String getNameOfService() {
-		return nameOfService;
+	public nameOfService getNameOfService() {
+		return serviceName;
 	}
-	public void setNameOfService(String nameOfService) {
-		this.nameOfService = nameOfService;
+	public void setNameOfService(String serviceName) {
+		this.serviceName = nameOfService.valueOf(serviceName);
 	}
 	public float getPriceOfService() {
 		return priceOfService;
@@ -71,7 +66,7 @@ public class Service {
 	}
 	@Override
 	public String toString() {
-		return "Person:" + nameOfCustomer + "Service: " + nameOfService + ", price: " + priceOfService + ", date: "
+		return "Person:" + nameOfCustomer + "Service: " + serviceName + ", price: " + priceOfService + ", date: "
 				+ dateAsString + "]";
 	}
 	/**
