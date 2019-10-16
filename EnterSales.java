@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.Scanner; 
 import javax.swing.*; 
+import java.util.HashMap;
 public class EnterSales {
 	//TO DO LIST:
 	/*
@@ -14,8 +15,6 @@ public class EnterSales {
 	- [ ] Validations 
 	
 	*/
-	
-	
 	ArrayList<Service> ServicesList = new ArrayList<Service>();
 	
 	public void DisplayList(ArrayList<Service> ServicesList) {
@@ -34,27 +33,40 @@ public class EnterSales {
 		}
 		else return null; 
 	}
+	
 	/**
-	 * read list from file 
+	 * Takes in the file used to put in service information
+	 * uses a Hashmap to store the name of the service as the key, with the string of all matching services as the String element
+	 * creates new files with the name of the service 
 	 * @param validFile
 	 */
 	public void readServicesFromFileintoNewFiles(File validFile) {
+		HashMap<String, String> list = new HashMap<String, String>();  
 		try {
 			Scanner textFile = new Scanner(validFile);
-			ArrayList<String> list = new ArrayList<String>();
 			while (textFile.hasNext()) { //for every line in the textfile
 				String input = textFile.nextLine();
 				String[] splitInput = input.split(";");
 				//validate input here * * * * * * 
-				
+				String currentServiceName = splitInput[1]; 
+				list.computeIfPresent(currentServiceName, (key, val) -> val.concat(input+"\n"));
+				list.putIfAbsent(currentServiceName, input+"\n");
+			}
+			textFile.close();
+		File validOutFile = null;
+		PrintWriter out = null;				
+		
+			for (String currentServiceName : list.keySet()) {
+				validOutFile = new File(validFile.getParent()+"/"+currentServiceName+".txt"); 
+				out = new PrintWriter(validOutFile);
+				out.write(list.get(currentServiceName));
+				out.close();
 			}
 			
-			System.out.println("Regular File Found!");	 
-			textFile.close();
 		}
-		catch(FileNotFoundException e) {
-				System.out.println("Invalid File!");
-			}
+		catch (FileNotFoundException e) {
+			System.out.println("file not found.");
+		}
 		}
 	/**
 	 * Write services into the text file 
