@@ -15,14 +15,21 @@ public class EnterSales {
 	- [ ] Validations 
 	
 	*/
-	ArrayList<Service> ServicesList = new ArrayList<Service>();
-	
+	/**
+	 * used for debugging to print to console
+	 * displays the service elements found in the input
+	 * @param ServicesList
+	 */
 	public void DisplayList(ArrayList<Service> ServicesList) {
 		for (Service x : ServicesList) {
 			System.out.println(x.getNameOfCustomer()+", "+x.getNameOfService()+", "+
 					x.getPriceOfService()+", "+x.getDateAsString());
 		}
 	}
+	/**
+	 * asks user for the input file to write the service elements to
+	 * @return
+	 */
 	public File inputFile() {
 	JFileChooser jFileChooser = new JFileChooser(); 
 		if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -55,7 +62,6 @@ public class EnterSales {
 			textFile.close();
 		File validOutFile = null;
 		PrintWriter out = null;				
-		
 			for (String currentServiceName : list.keySet()) {
 				validOutFile = new File(validFile.getParent()+"/"+currentServiceName+".txt"); 
 				out = new PrintWriter(validOutFile);
@@ -67,13 +73,14 @@ public class EnterSales {
 		catch (FileNotFoundException e) {
 			System.out.println("file not found.");
 		}
-		}
+		} // end of function
 	/**
 	 * Write services into the text file 
 	 * @param validFile
 	 */
 	public void addAllServicesToFile(File validFile) {
-			Scanner console = new Scanner(System.in);
+		ArrayList<Service> ServicesList = new ArrayList<Service>();
+		Scanner console = new Scanner(System.in);
 			boolean checkingFile = true;
 			int i = 0; 
 			while(checkingFile) {
@@ -99,9 +106,9 @@ public class EnterSales {
 						continueInput = answer.charAt(0);
 						if (continueInput != 'n' && continueInput != 'y') {
 							throw new IOException("invalid input");
-						}
+						} //end if statement
 						console.nextLine(); //burn nextline 
-					}
+					} // end while loop
 					BufferedWriter writer = new BufferedWriter(fileWriter);
 					for (i = 0; i < ServicesList.size(); i++) {
 						Service service  = ServicesList.get(i);
