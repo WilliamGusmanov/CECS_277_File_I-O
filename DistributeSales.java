@@ -95,8 +95,8 @@ public class DistributeSales {
 	            }//end if
 	        }//end for loop
 	    //check the date
-	    for (int i = 0; i < splitInput[2].length(); i++) { // checking for correct price format
-            if (splitInput[3].charAt(i) != '/' && !Character.isDigit(splitInput[2].charAt(i))) {
+	    for (int i = 0; i < splitInput[3].length(); i++) { // checking for correct price format
+            if (splitInput[3].charAt(i) != '/' && !Character.isDigit(splitInput[3].charAt(i))) {
                 throw new InputException("Invalid date input."); 
             }//end if
         }//end for loop
