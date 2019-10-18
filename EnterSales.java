@@ -1,20 +1,23 @@
 package fileInputOutPackage;
 import java.util.ArrayList;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner; 
-import javax.swing.*; 
-import java.util.HashMap;
+import javax.swing.*;
+
 public class EnterSales {
-	//TO DO LIST:
-	/*
 	
-	- [ ] Write your own exception class for any errors that might come up in the
-	sales records, such as an invalid service name, invalid date or invalid
-	price.
-	- [ ] Part 2 Output to files
-	- [ ] Validations 
-	
-	*/
+	/**
+	 * the main that runs the EnterSales Application
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		//File inputFile = inputFile();
+		EnterSales Enter = new EnterSales();
+		File inputFile = Enter.inputFile(); 
+		Enter.addAllServicesToFile(inputFile);
+	}
 	/**
 	 * used for debugging to print to console
 	 * displays the service elements found in the input
@@ -41,39 +44,6 @@ public class EnterSales {
 		else return null; 
 	}
 	
-	/**
-	 * Takes in the file used to put in service information
-	 * uses a Hashmap to store the name of the service as the key, with the string of all matching services as the String element
-	 * creates new files with the name of the service 
-	 * @param validFile
-	 */
-	public void readServicesFromFileintoNewFiles(File validFile) {
-		HashMap<String, String> list = new HashMap<String, String>();  
-		try {
-			Scanner textFile = new Scanner(validFile);
-			while (textFile.hasNext()) { //for every line in the textfile
-				String input = textFile.nextLine();
-				String[] splitInput = input.split(";");
-				//validate input here * * * * * * 
-				String currentServiceName = splitInput[1]; 
-				list.computeIfPresent(currentServiceName, (key, val) -> val.concat(input+"\n"));
-				list.putIfAbsent(currentServiceName, input+"\n");
-			}
-			textFile.close();
-		File validOutFile = null;
-		PrintWriter out = null;				
-			for (String currentServiceName : list.keySet()) {
-				validOutFile = new File(validFile.getParent()+"/"+currentServiceName+".txt"); 
-				out = new PrintWriter(validOutFile);
-				out.write(list.get(currentServiceName));
-				out.close();
-			}
-			
-		}
-		catch (FileNotFoundException e) {
-			System.out.println("file not found.");
-		}
-		} // end of function
 	/**
 	 * Write services into the text file 
 	 * @param validFile
@@ -125,13 +95,78 @@ public class EnterSales {
 				catch(IOException e) {
 					System.out.println(e.getMessage());
 				} //end of catch 1
-				catch (FileNotFoundException e) {
-					System.out.println("Invalid File!");
-				} //end of catch 2
-				catch (java.io.IOException e) {
-					System.out.println("Error with Buffer reader");
-					e.printStackTrace();
-				} //end of catch 3
 			} //end of while loop
 		}//end of function definition 
+	/**
+	 * Nested class Service
+	 * which contains enum of possible services, associated customer, and the float price of the service
+	 * 
+	 */
+	public static class Service {
+		enum nameOfService{
+			Breakfast,Lunch,Dinner,Conference,Tea,Massage
+		}
+		private String nameOfCustomer;
+		private nameOfService serviceName; //Breakfast, lunch, dinner, etc...
+		private float priceOfService;
+		
+		LocalDate date;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/uuuu"); 
+		private String dateAsString;
+		
+		public void inputDate(String inputDate){
+			String[] input = inputDate.split("/");
+			int month = Integer.parseInt(input[0]);
+			int day = Integer.parseInt(input[1]);
+			int year = Integer.parseInt(input[2]);
+			date = LocalDate.of(year, month, day); 
+			dateAsString = date.format(formatter);	
+		}
+		//default constructor
+		public Service() {
+			this.nameOfCustomer = "Customer";
+			this.serviceName = nameOfService.Breakfast;
+			this.priceOfService = 0.0f;
+			this.date = LocalDate.now();
+			this.dateAsString = this.date.format(formatter); 
+			
+		}
+		//second constructor
+		public Service(String nameOfCustomer, String serviceName, float priceOfService, LocalDate date) {
+			this.nameOfCustomer = nameOfCustomer;
+			this.serviceName = nameOfService.valueOf(serviceName);
+			this.priceOfService = priceOfService;
+			this.date = date;
+		}
+		public String getNameOfCustomer() {
+			return nameOfCustomer;
+		}
+		public void setNameOfCustomer(String nameOfCustomer) {
+			this.nameOfCustomer = nameOfCustomer;
+		}
+		public nameOfService getNameOfService() {
+			return serviceName;
+		}
+		public void setNameOfService(String serviceName) {
+			this.serviceName = nameOfService.valueOf(serviceName);
+		}
+		public float getPriceOfService() {
+			return priceOfService;
+		}
+		public void setPriceOfService(float priceOfService) {
+			this.priceOfService = priceOfService;
+		}
+		public LocalDate getDate() {
+			return date;
+		}
+		public String getDateAsString() {
+			return dateAsString;
+		}
+		@Override
+		public String toString() {
+			return "Person:" + nameOfCustomer + "Service: " + serviceName + ", price: " + priceOfService + ", date: "
+					+ dateAsString + "]";
+		}
+	} //end of service class
+
 	} //end of class 
