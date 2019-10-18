@@ -96,9 +96,6 @@ public class EnterSales {
 				catch(IllegalArgumentException e) {
 					System.out.println("Enter a valid service.");
 				}
-				catch (InvalidFloatException e) {
-					System.out.print(e.getMessage());
-				}
 				catch (DateTimeException e) {
 					System.out.println("Invalid date, please enter a valid date.");
 					}
