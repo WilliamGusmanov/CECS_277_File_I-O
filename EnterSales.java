@@ -66,8 +66,7 @@ public class EnterSales {
 						System.out.println("Enter price of service: ");
 						ServicesList.get(i).setPriceOfService(console.nextFloat()); 
 						System.out.println("Enter date of service MM/dd/uuuu: ");
-						ServicesList.get(i).inputDate(console.next());
-						i++; 
+						ServicesList.get(i++).inputDate(console.next());
 						System.out.println("Would you like to enter another service? ");
 						String answer = console.next();
 						answer = answer.toLowerCase(); 
