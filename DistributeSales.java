@@ -11,11 +11,9 @@ import javax.swing.JFileChooser;
 public class DistributeSales {
 	
 	public static void main(String[] args) {
-		
 		DistributeSales Distribute = new DistributeSales();
 		File inputFile = Distribute.inputFile();
-		Distribute.CreateNewServiceFiles(inputFile);
-		
+		Distribute.CreateNewServiceFiles(inputFile);	
 	}
 	/**
 	 * Prompts user to choose the inputFile that contains service information
@@ -44,7 +42,7 @@ public class DistributeSales {
 			while (textFile.hasNext()) { //for every line in the textfile
 				String input = textFile.nextLine();
 				String[] splitInput = input.split(";");
-				//isValid(splitInput); //check validation
+				isValid(splitInput); //check validation throws exception 
 				String currentServiceName = splitInput[1]; 
 				list.computeIfPresent(currentServiceName, (key, val) -> val.concat(input+"\n"));
 				list.putIfAbsent(currentServiceName, input+"\n");
@@ -62,18 +60,45 @@ public class DistributeSales {
 		catch (FileNotFoundException e) {
 			System.out.println("file not found.");
 			}
+		catch (InputException e) {
+			System.out.println(e.getMessage());
+		}
 		} // end of function
-	
-	/*
-	public void isValid(String[] splitInput) throws IOexception {
-	        Service serviceTest = new Service();
-	        for (int i = 0; i < splitInput[2].length(); i++) { // checking for correct price format
-	            if (splitInput[2].charAt(i) == '.') {
-	                return false;
-	            }
-	        }
-	        serviceTest.setNameOfService(splitInput[1]); //Will throw error if not valid enum
-	        return true;
-	    }
-	    */
-}
+	//Name, service, price, date
+	/**
+	 * Checks validation of values read in the input file
+	 * @param splitInput
+	 * @throws FloatNumberException
+	 */
+	public void isValid(String[] splitInput) throws InputException {
+	    String[] services = new String[] {"Breakfast","Lunch","Dinner","Conference","Tea","Massage"};
+	    //Check if its a name
+	    for (int i = 0; i < splitInput[0].length(); i++) { // checking for correct price format
+            if (!Character.isAlphabetic(splitInput[0].charAt(i)) && !Character.isWhitespace(splitInput[0].charAt(i))) {
+                throw new InputException("Invalid name input"); 
+            }//end if
+        }//end foor loop
+	    //check if its a service 
+	    boolean found = false; 
+	    for (int i = 0; i < services.length; i++) { // checking for correct price format
+            if (services[i].equals(splitInput[1])) {
+            	found = true; 
+            }//end if
+	    }//end for loop
+        if (!found) {
+        	throw new InputException("Invalid float value input.");
+        }//end if
+	    //check the price
+	    for (int i = 0; i < splitInput[2].length(); i++) { // checking for correct price format
+	            if (splitInput[2].charAt(i) != '.' && !Character.isDigit(splitInput[2].charAt(i))) {
+	                throw new InputException("Invalid price input."); 
+	            }//end if
+	        }//end for loop
+	    //check the date
+	    for (int i = 0; i < splitInput[2].length(); i++) { // checking for correct price format
+            if (splitInput[3].charAt(i) != '/' && !Character.isDigit(splitInput[2].charAt(i))) {
+                throw new InputException("Invalid date input."); 
+            }//end if
+        }//end for loop
+	}//end isValid function defintion
+}//end class definition
