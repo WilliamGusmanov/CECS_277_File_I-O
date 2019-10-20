@@ -15,6 +15,11 @@ import javax.swing.*;
 
 public class EnterSales {
 	/**
+	 * scanner that is used in input file and addServicesToFile
+	 */
+	Scanner console;
+	
+	/**
 	 * the main that runs the EnterSales Application
 	 */
 	public static void main(String[] args) {
@@ -38,10 +43,16 @@ public class EnterSales {
 	 * @return the input file if it is valid. If there is an invalid file, return null
 	 */
 	public File inputFile() {
-	JFileChooser jFileChooser = new JFileChooser(); 
+		console = new Scanner(System.in);
+		System.out.println("Enter name of file. ex.) Services ");
+		String fileName = console.next();
+		JFileChooser jFileChooser = new JFileChooser(); 
+		jFileChooser.setDialogTitle("Choose destination folder");
+		jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		jFileChooser.setAcceptAllFileFilterUsed(false);
 		if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			String outname = jFileChooser.getSelectedFile().getAbsolutePath();
-			File validFile = new File (outname); //input file path as chosen using JFileChooser 
+			File validFile = new File (outname + "/" + fileName + ".txt"); //input file path as chosen using JFileChooser 
 			return validFile; 
 		}//end if statement
 		else return null; 
@@ -54,23 +65,24 @@ public class EnterSales {
 	 */
 	public void addAllServicesToFile(File validFile) {
 		ArrayList<Service> ServicesList = new ArrayList<Service>();
-		Scanner console = new Scanner(System.in);
-			boolean checkingFile = true;
+		console = new Scanner(System.in);
+		boolean checkingFile = true;
 			int i = 0; 
 			while(checkingFile) {
 				try {
 					PrintWriter fileWriter = new PrintWriter(validFile);
-					System.out.println("Print File Found!");
 					checkingFile = false;
 					char continueInput = 'y';
 					while (continueInput == 'y') {
 						ServicesList.add(new Service()); 
 						System.out.println("Enter name of customer");
 						ServicesList.get(i).setNameOfCustomer(console.nextLine());
+						validateName(ServicesList.get(i).getNameOfCustomer());
 						System.out.println("Enter name of service ex.) Breakfast, Lunch, Dinner, Conference, Tea, Massage");
 						ServicesList.get(i).setNameOfService(console.next()); 
 						System.out.println("Enter price of service: ");
 						ServicesList.get(i).setPriceOfService(console.nextFloat()); 
+						validatePrice(ServicesList.get(i).getPriceOfService());
 						System.out.println("Enter date of service MM/dd/uuuu: ");
 						ServicesList.get(i++).inputDate(console.next());
 						System.out.println("Would you like to enter another service? ");
@@ -98,6 +110,11 @@ public class EnterSales {
 				catch(IOException e) {
 					System.out.println(e.getMessage());
 				} //end of catch for IO Exceptions 
+
+				}
+				catch (InputException e) {
+					System.out.println(e.getMessage());
+				} 
 				catch(IllegalArgumentException e) {
 					System.out.println("Enter a valid service.");
 				}//end of catch for IllegalArguementException 
@@ -126,7 +143,7 @@ public class EnterSales {
 			/**
 			 * Takes the date as a full string and sets the date as a string in the correct format
 			 * Throws exception if incorrect format inside of formatter
-			 * @param inputDate 
+			 * @param inputDate, input as a full string date in format (MM/dd/uuuu)
 			 */
 			public void inputDate(String inputDate) throws java.time.DateTimeException{
 				String[] input = inputDate.split("/");
@@ -200,4 +217,38 @@ public class EnterSales {
 						+ dateAsString + "]";
 			}//end of toString
 		} //end of service class
+		/**
+		 * checks to see if user only put alphabetic characters and white space characters
+		 * @param input, is a name that the user entered
+		 * @throws InputException, if string contains non alphabetic & not white space characters
+		 */
+		public void validateName(String input) throws InputException {
+			for (int i = 0; i < input.length(); i++) {
+				if (!Character.isAlphabetic(input.charAt(i)) && !Character.isWhitespace(input.charAt(i))) {
+					throw new InputException("Invalid name input");
+				} //end if
+			} //end for loop
+		} // end function defintion
+		/**
+		 * validates price by checking if the float value has greater than 2 decimal place values or is negative
+		 * @param input
+		 * @throws inputException, if value is negative or has too many floating point values
+		 */
+		public void validatePrice(float input) throws InputException {
+			String testfloat = Float.toString(input);
+			int count = 0;
+			boolean startcount = false; 
+			for (int i = 0; i < testfloat.length(); i++) {
+				if (testfloat.charAt(i) == '.') {
+					startcount = true;
+				}
+				if (startcount && Character.isDigit(testfloat.charAt(i))){
+					count++; 
+				}
+			}
+			if (count > 2 || input < 0.0) {
+				throw new InputException("Not a valid form of currency.");
+			}
+		}
+		//end isValid function defintion
 	} //end of class 
