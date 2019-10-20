@@ -1,4 +1,10 @@
+/**
+ * A class to enter sales 
+ * Homework Assignment: I/O Exceptions
+ * @author William Gusmanov, Bryan Vu
+ */
 package fileInputOutPackage;
+
 import java.util.ArrayList;
 import java.io.*;
 import java.time.DateTimeException;
@@ -10,17 +16,16 @@ import javax.swing.*;
 public class EnterSales {
 	/**
 	 * the main that runs the EnterSales Application
-	 * @param args
 	 */
 	public static void main(String[] args) {
 		EnterSales Enter = new EnterSales();
 		File inputFile = Enter.inputFile(); 
 		Enter.addAllServicesToFile(inputFile);
-	}
+	}//end of main
 	/**
 	 * used for debugging to print to console
 	 * displays the service elements found in the input
-	 * @param ServicesList
+	 * @param ServicesList the array list of available services 
 	 */
 	public void DisplayList(ArrayList<Service> ServicesList) {
 		for (Service x : ServicesList) {
@@ -30,7 +35,7 @@ public class EnterSales {
 	}//end function definition
 	/**
 	 * asks user for the input file to write the service elements to
-	 * @return
+	 * @return the input file if it is valid. If there is an invalid file, return null
 	 */
 	public File inputFile() {
 	JFileChooser jFileChooser = new JFileChooser(); 
@@ -38,13 +43,14 @@ public class EnterSales {
 			String outname = jFileChooser.getSelectedFile().getAbsolutePath();
 			File validFile = new File (outname); //input file path as chosen using JFileChooser 
 			return validFile; 
-		}
+		}//end if statement
 		else return null; 
-	}
+	}//end function definition
+	
 	/**
 	 * Write services into the text file 
 	 * prompts user to enter Customer name, the service, price, and date the service will be given  
-	 * @param validFile, the file the user chose to input to
+	 * @param validFile the file the user chose to input to
 	 */
 	public void addAllServicesToFile(File validFile) {
 		ArrayList<Service> ServicesList = new ArrayList<Service>();
@@ -109,7 +115,7 @@ public class EnterSales {
 		public static class Service {
 			enum nameOfService{
 				Breakfast,Lunch,Dinner,Conference,Tea,Massage
-			}
+			}//end of enum list
 			private String nameOfCustomer;
 			private nameOfService serviceName; //Breakfast, lunch, dinner, etc...
 			private float priceOfService;
@@ -129,8 +135,11 @@ public class EnterSales {
 				int year = Integer.parseInt(input[2]);
 				date = LocalDate.of(year, month, day); 
 				dateAsString = date.format(formatter);	
-			} 
-			//default constructor
+			}//end of function definition
+			
+			/*
+			 * Default constructor of service object
+			 */
 			public Service() {
 				this.nameOfCustomer = "Customer";
 				this.serviceName = nameOfService.Breakfast;
@@ -139,7 +148,14 @@ public class EnterSales {
 				this.dateAsString = this.date.format(formatter); 
 				
 			}
-			//second constructor
+			
+			/*
+			 * Overloaded constructor of service object
+			 * @param nameOfCustomer name of the customer
+			 * @param serviceName name of  the service
+			 * @param priceOfService price of the service
+			 * @param date date of the purchase
+			 */
 			public Service(String nameOfCustomer, String serviceName, float priceOfService, LocalDate date) {
 				this.nameOfCustomer = nameOfCustomer;
 				this.serviceName = nameOfService.valueOf(serviceName);
