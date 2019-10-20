@@ -8,9 +8,16 @@ package fileInputOutPackage;
 
 public class InputException extends Exception {
 
+/*
+ * default constructor for Input Exception
+ */
 InputException(){
 	super("invalid input exception.");
 	}
+/*
+ * overloaded constructor for Input Exception
+ * @param input the user's input, that will be reiterated when the exception is thrown
+ */
 InputException(String input){
 	super(input);
 }
