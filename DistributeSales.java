@@ -82,7 +82,7 @@ public class DistributeSales {
             if (!Character.isAlphabetic(splitInput[0].charAt(i)) && !Character.isWhitespace(splitInput[0].charAt(i))) {
                 throw new InputException("Invalid name input"); 
             }//end if
-        }//end foor loop
+        }//end for loop
 	    //check if its a service 
 	    boolean found = false; 
 	    for (int i = 0; i < services.length; i++) { // checking for correct price format

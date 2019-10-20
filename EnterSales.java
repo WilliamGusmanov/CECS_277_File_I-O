@@ -97,13 +97,13 @@ public class EnterSales {
 				} // end of try  
 				catch(IOException e) {
 					System.out.println(e.getMessage());
-				} //end of catch 1
+				} //end of catch for IO Exceptions 
 				catch(IllegalArgumentException e) {
 					System.out.println("Enter a valid service.");
-				}
+				}//end of catch for IllegalArguementException 
 				catch (DateTimeException e) {
 					System.out.println("Invalid date, please enter a valid date.");
-					}
+					}//end of catch for DateTimeException
 			} //end of while loop
 		}//end of function definition 
 	
@@ -126,7 +126,7 @@ public class EnterSales {
 			/**
 			 * Takes the date as a full string and sets the date as a string in the correct format
 			 * Throws exception if incorrect format inside of formatter
-			 * @param inputDate
+			 * @param inputDate 
 			 */
 			public void inputDate(String inputDate) throws java.time.DateTimeException{
 				String[] input = inputDate.split("/");
@@ -147,7 +147,7 @@ public class EnterSales {
 				this.date = LocalDate.now();
 				this.dateAsString = this.date.format(formatter); 
 				
-			}
+			}//end of default constructor for service
 			
 			/*
 			 * Overloaded constructor of service object
@@ -161,35 +161,43 @@ public class EnterSales {
 				this.serviceName = nameOfService.valueOf(serviceName);
 				this.priceOfService = priceOfService;
 				this.date = date;
-			}
+			}//end of overloaded constructor for service
+			
 			public String getNameOfCustomer() {
 				return nameOfCustomer;
-			}
+			}//end of getter method for name of customer
+			
 			public void setNameOfCustomer(String nameOfCustomer) {
 				this.nameOfCustomer = nameOfCustomer;
-			}
+			}//end of setter method for name of customer
+			
 			public nameOfService getNameOfService() {
 				return serviceName;
-			}
+			}//end of getter method for name of service
+			
 			public void setNameOfService(String serviceName) throws IllegalArgumentException {
 				this.serviceName = nameOfService.valueOf(serviceName);
-			}
+			}//end of setter method for name of service
+			
 			public float getPriceOfService() {
 				return priceOfService;
-			}
+			}//end of getter method for price of service
+			
 			public void setPriceOfService(float priceOfService) {
 				this.priceOfService = priceOfService;
-			}
+			}//end of setter method for price of service
+			
 			public LocalDate getDate() {
 				return date;
-			}
+			}//end of getter method for date
+			
 			public String getDateAsString() {
 				return dateAsString;
-			}
+			}//end of getter method for dateAsString
 			@Override
 			public String toString() {
 				return "Person:" + nameOfCustomer + "Service: " + serviceName + ", price: " + priceOfService + ", date: "
 						+ dateAsString + "]";
-			}
+			}//end of toString
 		} //end of service class
 	} //end of class 
