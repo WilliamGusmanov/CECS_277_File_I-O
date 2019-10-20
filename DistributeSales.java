@@ -1,3 +1,8 @@
+/**
+ * A class that takes an input file and creates a service file from it
+ * Homework Assignment: I/O Exceptions
+ * @author William Gusmanov, Bryan Vu
+ */
 package fileInputOutPackage;
 
 import java.io.File;
@@ -14,10 +19,10 @@ public class DistributeSales {
 		DistributeSales Distribute = new DistributeSales();
 		File inputFile = Distribute.inputFile();
 		Distribute.CreateNewServiceFiles(inputFile);	
-	}
+	}//end of main
 	/**
 	 * Prompts user to choose the inputFile that contains service information
-	 * @return
+	 * @return the input file if it is valid. If there is an invalid file, return null
 	 */
 	public File inputFile() {
 		JFileChooser jFileChooser = new JFileChooser(); 
@@ -26,14 +31,14 @@ public class DistributeSales {
 				String outname = jFileChooser.getSelectedFile().getAbsolutePath();
 				File validFile = new File (outname); //input file path as chosen using JFileChooser 
 				return validFile; 
-			}
+			}//end of if statement 
 			else return null; 
-		}
+		}//end of function definition
 	/**
 	 * Takes in the file used to put in service information
 	 * uses a Hashmap to store the name of the service as the key, with the string of all matching services as the String element
 	 * creates new files with the name of the service 
-	 * @param validFile
+	 * @param validFile the file that will be used to be put in service information
 	 */
 	public void CreateNewServiceFiles(File validFile) {
 		HashMap<String, String> list = new HashMap<String, String>();  
@@ -46,7 +51,7 @@ public class DistributeSales {
 				String currentServiceName = splitInput[1]; 
 				list.computeIfPresent(currentServiceName, (key, val) -> val.concat(input+"\n"));
 				list.putIfAbsent(currentServiceName, input+"\n");
-			}
+			}//end of while loop
 			textFile.close();
 		File validOutFile = null;
 		PrintWriter out = null;				
@@ -59,16 +64,16 @@ public class DistributeSales {
 		} //end try block
 		catch (FileNotFoundException e) {
 			System.out.println("file not found.");
-			}
+			}//end of catch for FileNotFoundException
 		catch (InputException e) {
 			System.out.println(e.getMessage());
-		}
+		}//end of catch for InputException
 		} // end of function
 	//Name, service, price, date
 	/**
 	 * Checks validation of values read in the input file
-	 * @param splitInput
-	 * @throws FloatNumberException
+	 * @param splitInput An array of the parts of the input split up
+	 * @throws FloatNumberException invalid price value
 	 */
 	public void isValid(String[] splitInput) throws InputException {
 	    String[] services = new String[] {"Breakfast","Lunch","Dinner","Conference","Tea","Massage"};
